@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace ImageSelectionServer
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Initial();
         }
 
         private static void Initial()
@@ -54,11 +56,23 @@ namespace ImageSelectionServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseDefaultFiles();
+            app.UseFileServer(enableDirectoryBrowsing: true);
+            app.UseStaticFiles(); // For the wwwroot folder
+
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "js")),
+                RequestPath = "/js",
+                EnableDirectoryBrowsing = true
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -69,8 +83,17 @@ namespace ImageSelectionServer
                 app.UseHsts();
             }
 
+            app.UseCors(options =>
+                options
+                    .SetPreflightMaxAge(TimeSpan.FromDays(1))
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowCredentials());
+
             app.UseHttpsRedirection();
             app.UseMvc();
+
         }
     }
 }
