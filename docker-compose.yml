@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  imageselectionserver:
+    image: ${DOCKER_REGISTRY-}imageselectionserver
+    build:
+      context: .
+      dockerfile: ImageSelectionServer/Dockerfile

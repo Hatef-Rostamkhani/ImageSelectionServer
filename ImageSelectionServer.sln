@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSelectionServer", "ImageSelectionServer\ImageSelectionServer.csproj", "{47B18A2E-47B2-4DF3-9EDC-9AEA5C8767ED}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{32FD1AFE-B7A8-4785-84BA-5D5DD737B48B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{47B18A2E-47B2-4DF3-9EDC-9AEA5C8767ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47B18A2E-47B2-4DF3-9EDC-9AEA5C8767ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47B18A2E-47B2-4DF3-9EDC-9AEA5C8767ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32FD1AFE-B7A8-4785-84BA-5D5DD737B48B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32FD1AFE-B7A8-4785-84BA-5D5DD737B48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32FD1AFE-B7A8-4785-84BA-5D5DD737B48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32FD1AFE-B7A8-4785-84BA-5D5DD737B48B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
