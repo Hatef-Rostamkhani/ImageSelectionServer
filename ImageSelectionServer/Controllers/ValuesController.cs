@@ -2,8 +2,10 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -13,6 +15,11 @@ namespace ImageSelectionServer.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public static string JsonPath = AppDomain.CurrentDomain.BaseDirectory + "\\DownloadedFilesjson\\";
+        public ValuesController()
+        {
+            Directory.CreateDirectory(JsonPath);
+        }
         [Route("saveimage")]
         [HttpGet]
         public ActionResult SaveImage(string word, string dataText, bool skip)
@@ -27,6 +34,7 @@ namespace ImageSelectionServer.Controllers
                 }
                 else
                 {
+                    System.IO.File.WriteAllText(JsonPath + word + ".json", dataText, Encoding.UTF8);
                     var image = JsonConvert.DeserializeObject<GoogleImage>(HttpUtility.UrlDecode(dataText));
                     Task.Factory.StartNew(() => DownloadImage(word, image.ImageUrl));
                 }

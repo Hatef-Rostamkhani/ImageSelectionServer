@@ -22,7 +22,7 @@ function SaveAndNext(postData, skip) {
     $.ajax({
         "async": true,
         "crossDomain": true,
-        url: "https://165.22.250.112/API/Values/SaveImage",
+        url: "https://localhost:44307/API/Values/SaveImage",
         method: 'get', "headers":
         {
             "Content-Type": "application/x-www-form-urlencoded",
