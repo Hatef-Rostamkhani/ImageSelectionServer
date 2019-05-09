@@ -20,6 +20,39 @@ namespace ImageSelectionServer.Controllers
         {
             Directory.CreateDirectory(JsonPath);
         }
+
+        [Route("downloadfailed")]
+        [HttpGet]
+        public ActionResult downloadfailed()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory + "\\FailToDownload.txt";
+                var images = System.IO.File.ReadAllLines(path).ToList();
+                string[] arr = new string[images.Count];
+                images.CopyTo(arr);
+                try
+                {
+                    foreach (var image in arr)
+                    {
+                        var splited = image.Split(',');
+                        if (DownloadImage(splited.First(), splited.Last()))
+                            images.Remove(image);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "\\" + "error.txt", "\r\n" + ex.ToString(), Encoding.UTF8);
+                }
+                finally
+                {
+                    System.IO.File.WriteAllLines(path, images, Encoding.UTF8);
+                }
+
+            });
+            return Content(DateTime.Now.ToString("yyyy/MM/dd"), "application/json");
+        }
+
         [Route("saveimage")]
         [HttpGet]
         public ActionResult SaveImage(string word, string dataText, bool skip)
@@ -43,17 +76,19 @@ namespace ImageSelectionServer.Controllers
             return Content(JsonConvert.SerializeObject(NextWord(word)), "application/json");
 
         }
-        public static void DownloadImage(string word, string url)
+        public static bool DownloadImage(string word, string url)
         {
             try
             {
                 WebClient wc = new WebClient();
                 wc.DownloadFile(url, AppDomain.CurrentDomain.BaseDirectory + "\\Images\\" + word + ".jpg");
+                return true;
             }
             catch (Exception)
             {
                 System.IO.File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "\\FailToDownload.txt",
                     word + "," + url + "\r\n");
+                return false;
             }
 
         }

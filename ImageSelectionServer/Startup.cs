@@ -28,6 +28,11 @@ namespace ImageSelectionServer
 
         private static void Initial()
         {
+            var path = AppDomain.CurrentDomain.BaseDirectory + "\\FailToDownload.txt";
+            var images = System.IO.File.ReadAllLines(path).ToList();
+            var ignoreFailed = images.Select(x => x.Split(',').FirstOrDefault()?.Trim()).ToList();
+
+
             Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\Images\\");
             var dic = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "\\fa.json");
             dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(dic);
@@ -47,6 +52,10 @@ namespace ImageSelectionServer
             if (skipedWords != null)
                 foreach (var word in skipedWords)
                     dictionary.Remove(word.Trim());
+
+
+            foreach (var word in ignoreFailed)
+                dictionary.Remove(word.Trim());
 
         }
 
